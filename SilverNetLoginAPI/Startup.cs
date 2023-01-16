@@ -1,4 +1,5 @@
 using DataAccess;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Services;
+using Services.Interfaces;
+using Services.Mapper;
 using System.Text;
 
 namespace SilverNetLoginAPI
@@ -65,9 +68,15 @@ namespace SilverNetLoginAPI
             });
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<Context>();
+            
+            #region Mapper
+            services.AddAutoMapper(typeof(AutoMapperProfiles));
+            #endregion
 
             #region Dependency inyecction
-            services.AddScoped(typeof(ITokenHandlerService), typeof(TokenHandlerService));
+            services.AddTransient<IBookRepository, BookRepository>()
+                .AddTransient<IBookService, BookService>()
+                .AddScoped(typeof(ITokenHandlerService), typeof(TokenHandlerService));
             #endregion
 
             services.AddDbContext<DataAccess.Context>(options =>
@@ -98,6 +107,7 @@ namespace SilverNetLoginAPI
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

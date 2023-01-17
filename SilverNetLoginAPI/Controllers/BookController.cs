@@ -39,7 +39,7 @@ namespace SilverNetLoginAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Books")]
+        [Route("AddGroup")]
         [Authorize]
         public async Task<IActionResult> Post([FromBody] List<DtoBookRequest> requests)
         {
@@ -56,7 +56,7 @@ namespace SilverNetLoginAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Book")]
+        [Route("Add")]
         [Authorize]
         public async Task<IActionResult> Post([FromBody] DtoBookRequest request)
         {
